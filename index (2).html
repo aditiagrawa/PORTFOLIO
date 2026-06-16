@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aditi Agrawal — AI/ML Engineer · Full-Stack Developer · Data Scientist</title>
+<meta name="description" content="Portfolio of Aditi Agrawal — AI/ML Engineer, Full-Stack Developer & Data Scientist. Top Rated freelancer, top 3% globally.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0E1A;
+    --surface:#121829;
+    --surface-2:#1A2238;
+    --border:rgba(255,255,255,0.08);
+    --border-strong:rgba(255,255,255,0.16);
+    --amber:#FF9F4A;
+    --amber-dim:rgba(255,159,74,0.14);
+    --teal:#4FD8C4;
+    --teal-dim:rgba(79,216,196,0.14);
+    --text:#ECEFF6;
+    --text-muted:#8C97B5;
+    --text-dim:#5A6483;
+    --radius:12px;
+    --font-display:'Space Grotesk',sans-serif;
+    --font-mono:'IBM Plex Mono',monospace;
+    --font-body:'Inter',sans-serif;
+    --maxw:1080px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size:28px 28px;
+    pointer-events:none;
+    z-index:0;
+  }
+  *:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:4px;}
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+  section{position:relative;z-index:1;padding:96px 0;border-bottom:1px solid var(--border);}
+  section:last-of-type{border-bottom:none;}
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--teal);
+    letter-spacing:0.02em;
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{content:"$";color:var(--text-dim);}
+  h2.section-title{
+    font-family:var(--font-display);
+    font-size:clamp(28px,4vw,38px);
+    font-weight:600;
+    margin-bottom:8px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .section-intro{color:var(--text-muted);max-width:620px;margin-bottom:48px;font-size:15.5px;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(10,14,26,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    max-width:var(--maxw);margin:0 auto;padding:0 24px;
+    display:flex;align-items:center;justify-content:space-between;
+    height:56px;
+  }
+  .nav-brand{font-family:var(--font-mono);font-size:14px;color:var(--text);font-weight:500;}
+  .nav-brand span{color:var(--amber);}
+  .nav-links{display:flex;gap:4px;font-family:var(--font-mono);font-size:12.5px;overflow-x:auto;}
+  .nav-links a{
+    padding:7px 10px;border-radius:6px;color:var(--text-dim);white-space:nowrap;transition:color .15s, background .15s;
+  }
+  .nav-links a:hover, .nav-links a.active{color:var(--text);background:var(--surface-2);}
+
+  /* ---------- HERO ---------- */
+  #hero{padding-top:72px;padding-bottom:80px;}
+  .term-block{
+    font-family:var(--font-mono);
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:18px 22px;
+    max-width:560px;
+    font-size:13.5px;
+    color:var(--text-muted);
+    margin-bottom:32px;
+  }
+  .term-block .line{margin-bottom:4px;}
+  .term-block .prompt{color:var(--text-dim);}
+  .term-block .out{color:var(--text);}
+  .term-dots{display:flex;gap:6px;margin-bottom:14px;}
+  .term-dots span{width:9px;height:9px;border-radius:50%;background:var(--border-strong);}
+
+  .hero-name{
+    font-family:var(--font-display);
+    font-size:clamp(40px,7vw,68px);
+    font-weight:700;
+    line-height:1.05;
+    margin-bottom:18px;
+    border-right:3px solid var(--amber);
+    display:inline-block;
+    animation:caret 1s steps(1) infinite;
+  }
+  @keyframes caret{50%{border-color:transparent;}}
+  .role-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+  .pill{
+    font-family:var(--font-mono);font-size:13px;
+    padding:6px 12px;border-radius:999px;
+    border:1px solid var(--border-strong);
+    color:var(--text-muted);
+  }
+  .hero-tagline{max-width:600px;color:var(--text-muted);font-size:16.5px;margin-bottom:36px;}
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:40px;max-width:680px;}
+  .stat{border-left:2px solid var(--amber);padding-left:14px;}
+  .stat .num{font-family:var(--font-display);font-size:24px;font-weight:700;}
+  .stat .label{font-size:12.5px;color:var(--text-dim);font-family:var(--font-mono);}
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;}
+  .btn{
+    font-family:var(--font-mono);font-size:14px;
+    padding:12px 20px;border-radius:8px;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:transform .15s, background .15s, border-color .15s;
+    border:1px solid var(--border-strong);
+    cursor:pointer;background:none;color:var(--text);
+  }
+  .btn:hover{transform:translateY(-1px);border-color:var(--amber);}
+  .btn-primary{background:var(--amber);color:#1A0F00;border-color:var(--amber);font-weight:600;}
+  .btn-primary:hover{background:#ffb066;}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:40px;}
+  .bio{color:var(--text-muted);font-size:15.5px;margin-bottom:28px;}
+  .bio strong{color:var(--text);}
+  .edu-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:22px 24px;margin-bottom:16px;
+  }
+  .edu-card .top-row{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:6px;}
+  .edu-card h3{font-family:var(--font-display);font-size:18px;font-weight:600;}
+  .edu-card .date{font-family:var(--font-mono);font-size:12.5px;color:var(--text-dim);}
+  .edu-card .org{color:var(--teal);font-size:14px;margin-bottom:10px;}
+  .edu-card ul{font-size:14px;color:var(--text-muted);}
+  .edu-card ul li{margin-bottom:5px;padding-left:16px;position:relative;}
+  .edu-card ul li::before{content:"›";position:absolute;left:0;color:var(--amber);}
+  .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+  .chip{font-family:var(--font-mono);font-size:11.5px;background:var(--surface-2);color:var(--text-muted);padding:4px 9px;border-radius:5px;}
+
+  /* ---------- EXPERIENCE / COMMIT LOG ---------- */
+  .commit{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:24px 26px;margin-bottom:18px;
+  }
+  .commit-meta{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:12.5px;color:var(--text-dim);margin-bottom:10px;flex-wrap:wrap;gap:8px;}
+  .commit-meta .hash{color:var(--amber);}
+  .commit h3{font-family:var(--font-display);font-size:19px;font-weight:600;margin-bottom:4px;}
+  .commit .org-line{font-size:14px;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .org-line .role-tag{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);border:1px solid var(--border-strong);padding:2px 8px;border-radius:999px;}
+  .diffstats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .diff{font-family:var(--font-mono);font-size:12px;padding:4px 9px;border-radius:5px;}
+  .diff.plus{color:var(--teal);background:var(--teal-dim);}
+  .diff.minus{color:var(--amber);background:var(--amber-dim);}
+  .commit ul{font-size:14.5px;color:var(--text-muted);}
+  .commit ul li{margin-bottom:7px;padding-left:18px;position:relative;}
+  .commit ul li::before{content:"+";color:var(--teal);position:absolute;left:0;font-family:var(--font-mono);}
+
+  /* ---------- PROJECTS ---------- */
+  .repo-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
+  .repo-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:22px 24px;display:flex;flex-direction:column;transition:border-color .15s, transform .15s;
+  }
+  .repo-card:hover{border-color:var(--border-strong);transform:translateY(-2px);}
+  .repo-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;}
+  .repo-head h3{font-family:var(--font-mono);font-size:17px;color:var(--text);}
+  .repo-head h3::before{content:"/";color:var(--text-dim);}
+  .repo-date{font-family:var(--font-mono);font-size:11.5px;color:var(--text-dim);}
+  .repo-tagline{font-size:13px;color:var(--text-dim);margin-bottom:10px;font-style:italic;}
+  .repo-desc{font-size:14px;color:var(--text-muted);margin-bottom:14px;flex-grow:1;}
+  .repo-stats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+  .repo-stats .stat-chip{font-family:var(--font-mono);font-size:11.5px;color:var(--teal);background:var(--teal-dim);padding:4px 9px;border-radius:5px;}
+  .repo-stack{display:flex;flex-wrap:wrap;gap:6px;}
+  .repo-stack span{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);border:1px solid var(--border);padding:3px 8px;border-radius:4px;}
+  .more-repos-label{font-family:var(--font-mono);font-size:12.5px;color:var(--text-dim);margin:30px 0 14px;}
+
+  /* ---------- SKILLS ---------- */
+  .editor{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+  .editor-bar{display:flex;align-items:center;gap:8px;padding:12px 18px;border-bottom:1px solid var(--border);background:var(--surface-2);}
+  .editor-bar .dot{width:10px;height:10px;border-radius:50%;}
+  .editor-bar .dot.r{background:#FF6B6B;}
+  .editor-bar .dot.y{background:#FFD166;}
+  .editor-bar .dot.g{background:#4FD8C4;}
+  .editor-bar .filename{font-family:var(--font-mono);font-size:12.5px;color:var(--text-dim);margin-left:6px;}
+  .editor-body{padding:28px 26px;display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  .skill-block .key{font-family:var(--font-mono);font-size:13px;color:var(--amber);margin-bottom:10px;}
+  .skill-block .key::after{content:":";color:var(--text-dim);}
+  .skill-tags{display:flex;flex-wrap:wrap;gap:6px;}
+  .skill-tags span{font-family:var(--font-mono);font-size:11.5px;background:var(--surface-2);color:var(--text-muted);padding:4px 9px;border-radius:5px;}
+
+  /* ---------- CERTS ---------- */
+  .release-card{
+    background:linear-gradient(135deg,var(--surface),var(--surface-2));
+    border:1px solid var(--border-strong);border-radius:var(--radius);
+    padding:24px 26px;margin-bottom:24px;display:flex;gap:18px;align-items:flex-start;
+  }
+  .release-tag{font-family:var(--font-mono);font-size:11px;background:var(--amber);color:#1A0F00;padding:4px 10px;border-radius:999px;white-space:nowrap;font-weight:600;}
+  .release-card h3{font-family:var(--font-display);font-size:18px;margin-bottom:6px;}
+  .release-card p{font-size:14px;color:var(--text-muted);}
+  .achieve-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:36px;}
+  .achieve-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;}
+  .achieve-card .a-tag{font-family:var(--font-mono);font-size:11px;color:var(--teal);margin-bottom:8px;}
+  .achieve-card h4{font-family:var(--font-display);font-size:16px;margin-bottom:8px;}
+  .achieve-card p{font-size:13.5px;color:var(--text-muted);}
+  .cert-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+  .cert-item{
+    font-family:var(--font-mono);font-size:12.5px;color:var(--text-muted);
+    background:var(--surface);border:1px solid var(--border);border-radius:8px;
+    padding:10px 14px;display:flex;justify-content:space-between;gap:8px;
+  }
+  .cert-item b{color:var(--text);font-family:var(--font-body);font-weight:600;font-size:13px;}
+  .cert-item .cid{color:var(--text-dim);font-size:10.5px;}
+
+  /* ---------- CONTACT ---------- */
+  #contact{padding-bottom:160px;}
+  .contact-term{font-family:var(--font-mono);font-size:14.5px;max-width:560px;}
+  .contact-term .line{margin-bottom:18px;}
+  .contact-term .prompt{color:var(--text-dim);}
+  .contact-term a{color:var(--teal);border-bottom:1px solid transparent;}
+  .contact-term a:hover{border-color:var(--teal);}
+  footer{text-align:center;padding:28px 0;font-family:var(--font-mono);font-size:12px;color:var(--text-dim);}
+
+  /* ---------- NARRATOR WIDGET ---------- */
+  .narrator{
+    position:fixed;bottom:20px;right:20px;z-index:100;
+    background:rgba(18,24,41,0.95);backdrop-filter:blur(10px);
+    border:1px solid var(--border-strong);border-radius:14px;
+    width:300px;box-shadow:0 12px 30px rgba(0,0,0,0.4);
+    font-family:var(--font-mono);
+  }
+  .narrator-row{display:flex;align-items:center;gap:10px;padding:14px 16px;}
+  .narrator button{
+    background:var(--surface-2);border:1px solid var(--border-strong);color:var(--text);
+    width:36px;height:36px;border-radius:50%;flex-shrink:0;cursor:pointer;font-size:14px;
+    display:flex;align-items:center;justify-content:center;transition:background .15s;
+  }
+  .narrator button:hover{background:var(--amber);color:#1A0F00;}
+  .narrator-info{flex-grow:1;overflow:hidden;}
+  .narrator-label{display:block;font-size:11px;color:var(--text-dim);margin-bottom:3px;}
+  .narrator-caption{display:block;font-size:12px;color:var(--text-muted);line-height:1.4;font-family:var(--font-body);}
+  .narrator-progress{display:flex;gap:5px;padding:0 16px 14px;}
+  .narrator-progress .dot{
+    flex:1;height:4px;border-radius:999px;background:var(--surface-2);
+    border:none;cursor:pointer;padding:0;transition:background .2s;
+  }
+  .narrator-progress .dot.active{background:var(--amber);}
+  .narrator-progress .dot.done{background:var(--teal);}
+
+  /* ---------- REVEAL ---------- */
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease, transform .5s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  .narrating{outline:1px solid var(--amber);border-radius:var(--radius);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important;}
+    html{scroll-behavior:auto;}
+  }
+
+  @media (max-width:760px){
+    .about-grid, .repo-grid, .achieve-grid, .editor-body, .cert-grid{grid-template-columns:1fr;}
+    .stat-row{grid-template-columns:repeat(2,1fr);}
+    .narrator{width:calc(100% - 32px);right:16px;left:16px;bottom:16px;}
+    section{padding:64px 0;}
+    .nav-links{font-size:11px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">aditi<span>@</span>portfolio</div>
+    <div class="nav-links" id="navLinks">
+      <a href="#hero">hero.sh</a>
+      <a href="#about">about.md</a>
+      <a href="#experience">experience.log</a>
+      <a href="#projects">projects/</a>
+      <a href="#skills">skills.json</a>
+      <a href="#certs">certs.yml</a>
+      <a href="#contact">contact.sh</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="wrap">
+      <div class="term-dots"><span></span><span></span><span></span></div>
+      <div class="term-block">
+        <div class="line"><span class="prompt">$ </span>whoami</div>
+        <div class="line out">› AI/ML Engineer · Full-Stack Developer · Data Scientist</div>
+        <div class="line"><span class="prompt">$ </span>cat status.txt</div>
+        <div class="line out">› Top Rated · Top 3% Globally · 50+ Projects · 4.9/5.0</div>
+      </div>
+
+      <h1 class="hero-name">Aditi Agrawal</h1>
+
+      <div class="role-pills">
+        <span class="pill">AI / ML Engineer</span>
+        <span class="pill">Full-Stack Developer</span>
+        <span class="pill">Data Scientist</span>
+        <span class="pill">Bhopal, India</span>
+      </div>
+
+      <p class="hero-tagline">Building production ML systems and full-stack platforms — from a legal AI pipeline that cuts review time 82%, to federated learning networks, to BI dashboards that save hundreds of hours a month.</p>
+
+      <div class="stat-row">
+        <div class="stat"><div class="num">50+</div><div class="label">PROJECTS DELIVERED</div></div>
+        <div class="stat"><div class="num">4.9/5</div><div class="label">CLIENT RATING</div></div>
+        <div class="stat"><div class="num">TOP 3%</div><div class="label">FREELANCER GLOBALLY</div></div>
+        <div class="stat"><div class="num">1</div><div class="label">PATENT FILED</div></div>
+      </div>
+
+      <div class="cta-row">
+        <a href="#projects" class="btn btn-primary">→ See the work</a>
+        <a href="mailto:aditigccoist@gmail.com" class="btn">✉ Get in touch</a>
+        <button class="btn" onclick="playFullTour()">▶ Hear me explain it</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="wrap">
+      <div class="eyebrow">cat about.md</div>
+      <h2 class="section-title">About</h2>
+      <p class="section-intro">Student, freelancer, builder — in that order of how it started, not how it ranks.</p>
+
+      <div class="about-grid">
+        <div class="reveal">
+          <p class="bio">I'm a third-year <strong>B.Tech Computer Science (Data Science)</strong> student at OIST Bhopal, and a <strong>Top Rated freelancer</strong> who's spent the last few years shipping production ML systems and full-stack platforms for clients across e-commerce, healthcare, and fintech. Outside client work, I lead my college's <strong>Microsoft Learn Student Ambassadors</strong> chapter, mentoring the next batch of builders, and I hold a patent for an emergency-response app I built during a real crisis.</p>
+        </div>
+
+        <div class="reveal">
+          <div class="edu-card">
+            <div class="top-row">
+              <h3>Oriental Institute of Science &amp; Technology</h3>
+              <span class="date">Aug 2023 – May 2027</span>
+            </div>
+            <div class="org">B.Tech, CSE (Data Science) · CGPA 8.0 · 3rd Year</div>
+            <ul>
+              <li>Top 10 in class · All-Rounder</li>
+              <li>Organized multiple national-level technical &amp; cultural events</li>
+            </ul>
+            <div class="tag-row">
+              <span class="chip">Machine Learning</span><span class="chip">Deep Learning</span><span class="chip">NLP</span>
+              <span class="chip">DSA</span><span class="chip">DBMS</span><span class="chip">Cloud Computing</span>
+              <span class="chip">Software Engineering</span><span class="chip">Compiler Design</span><span class="chip">OS</span><span class="chip">Computer Networks</span>
+            </div>
+          </div>
+
+          <div class="edu-card">
+            <div class="top-row">
+              <h3>Carmel Convent Sr. Sec. School, B.H.E.L.</h3>
+              <span class="date">2021 – 2023</span>
+            </div>
+            <div class="org">CBSE · Senior Secondary (XII), Science · 90% in Class X</div>
+            <ul>
+              <li>Gold Medalist — Class XII · Scholarship Recipient</li>
+              <li>Top 10 in class · All-Rounder</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="wrap">
+      <div class="eyebrow">git log --oneline experience</div>
+      <h2 class="section-title">Experience</h2>
+      <p class="section-intro">Six roles, one running thread: ship things that measurably move a number.</p>
+
+      <div class="commit reveal">
+        <div class="commit-meta"><span class="hash">#a3f9c21</span><span class="date">Feb 2021 — Present</span></div>
+        <h3>Independent AI/ML Engineer &amp; Full-Stack Consultant</h3>
+        <div class="org-line">Freelancer.com · Remote <span class="role-tag">TOP RATED · 4.9★ · TOP 3% GLOBALLY</span></div>
+        <div class="diffstats">
+          <span class="diff plus">+22% forecast accuracy</span>
+          <span class="diff minus">−18% client attrition</span>
+          <span class="diff minus">−300 hrs/mo reporting</span>
+        </div>
+        <ul>
+          <li>Delivered 50+ end-to-end client engagements across AI/ML pipelines, full-stack web apps (Angular, React, Node.js, PostgreSQL), BI dashboards (Power BI, Tableau), and ETL automation for e-commerce, healthcare, and fintech clients — 4.9★ rating, 100% on-time delivery.</li>
+          <li>Deployed an NLP-powered XGBoost churn model (91% AUC) on AWS EC2, reducing client attrition by 18% in 60 days; built multi-tenant SaaS platforms and executive dashboards eliminating 300+ monthly manual reporting hours.</li>
+          <li>Engineered end-to-end ML pipelines (EDA → feature engineering → neural network training → AWS deployment), improving forecast accuracy up to 22%; reached Top Rated status — top 3% globally — within 10 months.</li>
+          <li>Built full-stack internal tools and production web apps using Angular, React, Node.js, Express.js, MySQL, MongoDB, and PostgreSQL — clean RESTful APIs, JWT authentication, and responsive component-driven UIs on every engagement.</li>
+        </ul>
+      </div>
+
+      <div class="commit reveal">
+        <div class="commit-meta"><span class="hash">#7be0418</span><span class="date">Mar 2025 — May 2026</span></div>
+        <h3>Full-Stack Developer</h3>
+        <div class="org-line">Cognifyz Technologies · Bhopal <span class="role-tag">PERMANENT ROLE</span></div>
+        <ul>
+          <li>Owned end-to-end development of an internal enterprise tooling platform using Angular &amp; React (frontend) and Node.js + Express.js (backend), integrated with MySQL, PostgreSQL, and MongoDB — built RESTful APIs, JWT-based authentication, and role-based access control from scratch.</li>
+          <li>Designed and optimized relational and non-relational database schemas for scalable, high-performance data storage; managed the complete SDLC across multiple simultaneous feature tracks using Git and agile practices.</li>
+        </ul>
+      </div>
+
+      <div class="commit reveal">
+        <div class="commit-meta"><span class="hash">#c92d183</span><span class="date">Mar 2026 — Apr 2026</span></div>
+        <h3>AI Research Intern</h3>
+        <div class="org-line">Cognifyz Technologies · Bhopal <span class="role-tag">INTERNSHIP</span></div>
+        <div class="diffstats"><span class="diff plus">Patent filed: Paritrana</span></div>
+        <ul>
+          <li>Sole inventor of <strong style="color:var(--text)">Paritrana</strong> (Patented, Indian Patent Office) — a life-saving emergency response application providing real-time resource connectivity and crisis communication to civilians and rescue teams during the Uttarakhand pandemic, recognized and protected as novel intellectual property.</li>
+          <li>Developed a Neuro-Linguistic Stress Analysis application using NLP and signal processing to detect cognitive stress patterns from multimodal inputs, integrated into a real-time clinical dashboard via FastAPI and React.</li>
+        </ul>
+      </div>
+
+      <div class="commit reveal">
+        <div class="commit-meta"><span class="hash">#f10aa42</span><span class="date">Jan 2025 — Jun 2025</span></div>
+        <h3>Data Science Trainee</h3>
+        <div class="org-line">Cybrom Technology · Bhopal <span class="role-tag">6-MONTH PROGRAM</span></div>
+        <div class="diffstats"><span class="diff minus">−31% RMSE</span></div>
+        <ul>
+          <li>Led retail demand forecasting using an XGBoost + LSTM neural network ensemble across 3 capstone projects, reducing RMSE by 31% over baseline; presented findings to an industry panel of data science professionals.</li>
+          <li>Gained production expertise in Python, SQL, Power BI, machine learning, deep learning, and AWS; earned AMZ-DS-2026-003 and META-ML-2026-004 certifications upon completion.</li>
+        </ul>
+      </div>
+
+      <div class="commit reveal">
+        <div class="commit-meta"><span class="hash">#3d88e71</span><span class="date">2024</span></div>
+        <h3>Research Intern</h3>
+        <div class="org-line">BARC — Bhabha Atomic Research Centre · Mumbai / Remote</div>
+        <ul>
+          <li>Applied statistical modeling and Python-based computational workflows to structured experimental datasets under direct scientific supervision at India's premier nuclear research institution — reinforcing high-precision data integrity and rigorous analytical methodology.</li>
+        </ul>
+      </div>
+
+      <div class="commit reveal">
+        <div class="commit-meta"><span class="hash">#9c014bf</span><span class="date">Sep 2024 — Mar 2026</span></div>
+        <h3>Head Girl &amp; Technical Community Ambassador</h3>
+        <div class="org-line">Microsoft Learn Student Ambassadors (MLSA) · OIST Bhopal Chapter</div>
+        <div class="diffstats">
+          <span class="diff plus">150+ peers trained</span>
+          <span class="diff plus">95%+ satisfaction</span>
+        </div>
+        <ul>
+          <li>Designed and led Python, DSA, machine learning, and Power BI workshops for 150+ peers — 95%+ satisfaction scores; mentored 20+ junior students, 8 of whom independently shipped and presented complete projects within 3 months.</li>
+          <li>Planned and executed 5+ national-level hackathons and analytics competitions for 80+ participants per event — driving technical community growth across campus.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="wrap">
+      <div class="eyebrow">ls -la projects/</div>
+      <h2 class="section-title">Projects</h2>
+      <p class="section-intro">Six repos, six different problems — legal AI, BI, federated learning, churn, markets, and algorithms.</p>
+
+      <div class="repo-grid">
+        <div class="repo-card reveal">
+          <div class="repo-head"><h3>neurolaw</h3><span class="repo-date">May 2026</span></div>
+          <div class="repo-tagline">AI Legal Document Intelligence Engine</div>
+          <p class="repo-desc">A 3-agent LLM pipeline (NLP entity extraction → clause flagging → plain-English summaries) over contracts, via RAG + semantic vector search. React annotation UI with risk-score heatmaps; Node.js backend with RBAC and audit logging.</p>
+          <div class="repo-stats"><span class="stat-chip">−82% review time</span><span class="stat-chip">&lt;2s latency / 40pg doc</span></div>
+          <div class="repo-stack"><span>Python</span><span>LLM APIs</span><span>RAG</span><span>Vector DB</span><span>React</span><span>Node.js</span></div>
+        </div>
+
+        <div class="repo-card reveal">
+          <div class="repo-head"><h3>pulseiq</h3><span class="repo-date">May 2026</span></div>
+          <div class="repo-tagline">Real-Time BI &amp; Predictive Analytics Platform</div>
+          <p class="repo-desc">Full-stack BI platform ingesting multi-source data (SQL, REST APIs, CSV) into automated ETL pipelines. Random Forest + GBM ensemble for revenue, churn, and demand forecasting, with real-time KPI dashboards and anomaly alerting.</p>
+          <div class="repo-stats"><span class="stat-chip">89% accuracy</span><span class="stat-chip">−75% reporting time</span></div>
+          <div class="repo-stack"><span>Python</span><span>SQL</span><span>Power BI</span><span>FastAPI</span><span>Plotly</span></div>
+        </div>
+
+        <div class="repo-card reveal">
+          <div class="repo-head"><h3>cognitivemesh</h3><span class="repo-date">Apr 2026</span></div>
+          <div class="repo-tagline">Federated On-Device Intelligence Network</div>
+          <p class="repo-desc">Privacy-preserving federated deep learning framework with Byzantine-robust aggregation, stable under 25% adversarial poisoning, and differential privacy (ε=0.8) — zero raw data transfer, accuracy within 2.1% of centralized training.</p>
+          <div class="repo-stats"><span class="stat-chip">94.3% F1 · 12 nodes</span><span class="stat-chip">ε=0.8 privacy</span></div>
+          <div class="repo-stack"><span>Python</span><span>Federated Learning</span><span>TF Lite</span><span>WebSocket</span><span>React</span></div>
+        </div>
+
+        <div class="repo-card reveal">
+          <div class="repo-head"><h3>churnsense</h3><span class="repo-date">Apr 2026</span></div>
+          <div class="repo-tagline">Customer Attrition Intelligence Engine</div>
+          <p class="repo-desc">Full EDA on a 500K+ row dataset; RFM and engagement-velocity feature engineering. XGBoost model with SHAP explainability surfacing top churn drivers per segment; Tableau dashboard with scheduled SQL refresh.</p>
+          <div class="repo-stats"><span class="stat-chip">93% AUC</span><span class="stat-chip">−40+ hrs/mo reporting</span></div>
+          <div class="repo-stack"><span>Python</span><span>XGBoost</span><span>SHAP</span><span>SQL</span><span>Tableau</span></div>
+        </div>
+      </div>
+
+      <div class="more-repos-label">› also shipped</div>
+      <div class="repo-grid">
+        <div class="repo-card reveal">
+          <div class="repo-head"><h3>marketpulse</h3><span class="repo-date">Mar 2026</span></div>
+          <div class="repo-tagline">Sentiment-Driven Stock Predictor</div>
+          <p class="repo-desc">Fine-tuned BERT sentiment model on 100K+ financial news articles and Reddit data, fused with RSI/MACD/Bollinger Bands. Automated SQL pipeline with interactive Plotly dashboards, sentiment heatmaps, and backtested P&amp;L curves.</p>
+          <div class="repo-stats"><span class="stat-chip">67% vs 52% baseline</span></div>
+          <div class="repo-stack"><span>Python</span><span>BERT</span><span>NLP</span><span>yfinance</span><span>Plotly</span></div>
+        </div>
+
+        <div class="repo-card reveal">
+          <div class="repo-head"><h3>algovault</h3><span class="repo-date">Jan 2026</span></div>
+          <div class="repo-tagline">High-Performance DSA &amp; Algorithm Engine</div>
+          <p class="repo-desc">80+ optimized DSA implementations (dynamic programming, graph theory, segment trees, computational geometry) with full Big-O analysis, cache-aware memory layouts, and an O(1) hash-indexed module registry.</p>
+          <div class="repo-stats"><span class="stat-chip">−38% execution time</span><span class="stat-chip">100% test coverage</span></div>
+          <div class="repo-stack"><span>Java</span><span>C++</span><span>DP</span><span>Graph Algorithms</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="wrap">
+      <div class="eyebrow">cat skills.json</div>
+      <h2 class="section-title">Technical Skills</h2>
+      <p class="section-intro">The full stack, from model training to production deployment.</p>
+
+      <div class="editor reveal">
+        <div class="editor-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="filename">stack.json</span>
+        </div>
+        <div class="editor-body">
+          <div class="skill-block">
+            <div class="key">"languages"</div>
+            <div class="skill-tags"><span>Python</span><span>Java</span><span>C++</span><span>JavaScript</span><span>TypeScript</span><span>SQL</span><span>R</span></div>
+          </div>
+          <div class="skill-block">
+            <div class="key">"ai_ml"</div>
+            <div class="skill-tags"><span>Machine Learning</span><span>Deep Learning</span><span>XGBoost</span><span>Scikit-learn</span><span>TensorFlow</span><span>Keras</span><span>PyTorch</span><span>SHAP</span><span>EDA</span><span>A/B Testing</span></div>
+          </div>
+          <div class="skill-block">
+            <div class="key">"dl_architectures"</div>
+            <div class="skill-tags"><span>CNN</span><span>RNN</span><span>LSTM</span><span>Bi-LSTM</span><span>Transformer</span><span>Attention</span><span>Federated Learning</span><span>Ensemble Methods</span><span>Clustering</span><span>Time-Series</span></div>
+          </div>
+          <div class="skill-block">
+            <div class="key">"nlp_genai"</div>
+            <div class="skill-tags"><span>NLP</span><span>BERT</span><span>Hugging Face</span><span>Sentiment Analysis</span><span>NER</span><span>LLM API Integration</span><span>Prompt Engineering</span><span>Multi-Agent</span><span>RAG</span><span>Vector DBs</span></div>
+          </div>
+          <div class="skill-block">
+            <div class="key">"fullstack_backend"</div>
+            <div class="skill-tags"><span>Angular</span><span>React.js</span><span>Node.js</span><span>Express.js</span><span>FastAPI</span><span>REST APIs</span><span>WebSocket</span><span>JWT Auth</span><span>Microservices</span></div>
+          </div>
+          <div class="skill-block">
+            <div class="key">"cloud_devops"</div>
+            <div class="skill-tags"><span>AWS EC2</span><span>S3</span><span>Lambda</span><span>SageMaker</span><span>Docker</span><span>Git</span><span>GitHub</span><span>Linux/Bash</span></div>
+          </div>
+          <div class="skill-block">
+            <div class="key">"bi_visualization"</div>
+            <div class="skill-tags"><span>Power BI</span><span>Tableau</span><span>Plotly</span><span>Matplotlib</span><span>Seaborn</span><span>Folium</span><span>Dashboard Design</span></div>
+          </div>
+          <div class="skill-block">
+            <div class="key">"databases_etl"</div>
+            <div class="skill-tags"><span>MySQL</span><span>PostgreSQL</span><span>MongoDB</span><span>Redis</span><span>Schema Design</span><span>ETL Pipelines</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTS -->
+  <section id="certs">
+    <div class="wrap">
+      <div class="eyebrow">cat certs.yml</div>
+      <h2 class="section-title">Certifications, Patent &amp; Achievements</h2>
+
+      <div class="release-card reveal">
+        <span class="release-tag">PATENT</span>
+        <div>
+          <h3>Paritrana — Emergency Response Application</h3>
+          <p>Sole inventor, filed with the Indian Patent Office. A life-saving emergency response application providing real-time resource connectivity and crisis communication to civilians and rescue teams, deployed during the Uttarakhand pandemic crisis.</p>
+        </div>
+      </div>
+
+      <div class="achieve-grid">
+        <div class="achieve-card reveal">
+          <div class="a-tag">HACKATHON · APRIL 2026</div>
+          <h4>Goldman Sachs National Level Hackathon — Finalist</h4>
+          <p>Top 10% of 500+ national teams. Architected a real-time financial fraud detection system using graph neural networks + ensemble ML under 24-hour sprint conditions — commended by Goldman Sachs technical judges for system design, analytical rigor, and live demo quality.</p>
+        </div>
+        <div class="achieve-card reveal">
+          <div class="a-tag">LEADERSHIP · 2024 — PRESENT</div>
+          <h4>Technical Event Organizer &amp; Head Girl</h4>
+          <p>OIST Bhopal / MLSA. Organized 5+ national-level hackathons and analytics competitions for 80+ participants each; mentored 20+ students in DSA, ML, and software engineering — directly enabling independent project launches and external competition wins.</p>
+        </div>
+      </div>
+
+      <div class="eyebrow" style="margin-bottom:16px;">tags --list</div>
+      <div class="cert-grid reveal">
+        <div class="cert-item"><span><b>Google</b><br>Advanced Data Analytics</span><span class="cid">GGL-ADA-2026-011</span></div>
+        <div class="cert-item"><span><b>Google</b><br>Data Structures &amp; Algorithms</span><span class="cid">GGL-DSA-2026-001</span></div>
+        <div class="cert-item"><span><b>Microsoft</b><br>Full Stack Development</span><span class="cid">MS-FSD-2026-002</span></div>
+        <div class="cert-item"><span><b>Amazon AWS</b><br>Data Science &amp; Analytics</span><span class="cid">AMZ-DS-2026-003</span></div>
+        <div class="cert-item"><span><b>Meta</b><br>Machine Learning Fundamentals</span><span class="cid">META-ML-2026-004</span></div>
+        <div class="cert-item"><span><b>Netflix</b><br>Backend Dev &amp; API Engineering</span><span class="cid">NFLX-BE-2026-005</span></div>
+        <div class="cert-item"><span><b>IBM</b><br>Data Analyst Professional</span><span class="cid">IBM-DA-2026-007</span></div>
+        <div class="cert-item"><span><b>DeepLearning.AI</b><br>Deep Learning Specialization</span><span class="cid">DL-AI-2026-009</span></div>
+        <div class="cert-item"><span><b>Tableau</b><br>Desktop Specialist</span><span class="cid">TBL-DS-2026-012</span></div>
+        <div class="cert-item"><span><b>Google</b><br>Advanced Google Analytics</span><span class="cid">Mar 2025</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="eyebrow">./contact.sh</div>
+      <h2 class="section-title">Let's build something</h2>
+      <p class="section-intro">Open to freelance engagements, internships, and collaborations.</p>
+
+      <div class="contact-term reveal">
+        <div class="line"><span class="prompt">$ </span>open mailto<br>› <a href="mailto:aditigccoist@gmail.com">aditigccoist@gmail.com</a></div>
+        <div class="line"><span class="prompt">$ </span>call<br>› +91 93997 28483</div>
+        <div class="line"><span class="prompt">$ </span>open linkedin<br>› <a href="https://linkedin.com/in/aditi-agrawal-726889290" target="_blank" rel="noopener">linkedin.com/in/aditi-agrawal-726889290</a></div>
+        <div class="line"><span class="prompt">$ </span>git remote -v<br>› <a href="https://github.com/aditiagrawa" target="_blank" rel="noopener">github.com/aditiagrawa</a> (fetch)</div>
+        <div class="line"><span class="prompt">$ </span>whereis aditi<br>› Bhopal, India</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>built with intent · last updated 2026</footer>
+
+<!-- NARRATOR WIDGET -->
+<div class="narrator" id="narrator">
+  <div class="narrator-row">
+    <button id="narratorToggle" aria-label="Play portfolio narration">▶</button>
+    <div class="narrator-info">
+      <span class="narrator-label">$ ./narrate.sh --voice</span>
+      <span class="narrator-caption" id="narratorCaption">Tap play to hear Aditi walk through this portfolio</span>
+    </div>
+    <button id="narratorStop" aria-label="Stop narration">■</button>
+  </div>
+  <div class="narrator-progress" id="narratorProgress"></div>
+</div>
+
+<script>
+  // ---------- SCROLL REVEAL ----------
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:0.12});
+  revealEls.forEach(el=>io.observe(el));
+
+  // ---------- NAV ACTIVE STATE ----------
+  const navLinks = document.querySelectorAll('#navLinks a');
+  const navIo = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        navLinks.forEach(l=>l.classList.remove('active'));
+        const match = document.querySelector('#navLinks a[href="#'+entry.target.id+'"]');
+        if(match) match.classList.add('active');
+      }
+    });
+  },{rootMargin:'-40% 0px -50% 0px'});
+  document.querySelectorAll('main section').forEach(s=>navIo.observe(s));
+
+  // ---------- NARRATION SCRIPT ----------
+  const NARRATION = [
+    {id:'hero', sentences:[
+      "Hi, I'm Aditi Agrawal — an A I and machine learning engineer, full-stack developer, and data scientist based in Bhopal, India.",
+      "I'm a third-year B Tech student, and a top-rated freelancer in the top three percent globally, having delivered more than fifty projects for clients around the world."
+    ]},
+    {id:'about', sentences:[
+      "I'm currently in my third year at Oriental Institute of Science and Technology in Bhopal, studying computer science with a focus on data science, with a C G P A of eight out of ten.",
+      "Before that, I graduated as a gold medalist from Carmel Convent Senior Secondary School.",
+      "Along the way I've picked up a patent, a hackathon finalist title, and mentored more than a hundred and fifty students."
+    ]},
+    {id:'experience', sentences:[
+      "My freelance work on Freelancer dot com has been the constant thread since 2021 — fifty-plus client engagements spanning full-stack apps, machine learning pipelines, and B I dashboards, including a churn model that cut client attrition by eighteen percent.",
+      "I've also been a full-stack developer and A I research intern at Cognifyz Technologies, where I built an enterprise tooling platform and, as sole inventor, patented Paritrana, an emergency response app built for crisis response during the Uttarakhand pandemic.",
+      "Earlier roles took me through a data science traineeship at Cybrom Technology, a research internship at the Bhabha Atomic Research Centre, and leading Microsoft's student ambassador chapter at my college."
+    ]},
+    {id:'projects', sentences:[
+      "A few projects I'm proud of: NeuroLaw, a three-agent legal A I pipeline that cuts contract review time by eighty-two percent; PulseIQ, a real-time B I platform that saves analysts seventy-five percent of their reporting time.",
+      "CognitiveMesh, a privacy-preserving federated learning network hitting ninety-four percent F1 score across twelve nodes; and ChurnSense, an X G Boost churn model with ninety-three percent A U C.",
+      "I've also built MarketPulse, a BERT-powered stock sentiment predictor, and AlgoVault, a high-performance algorithms engine with full unit test coverage."
+    ]},
+    {id:'skills', sentences:[
+      "On the stack side, I work across Python, Java, C plus plus, JavaScript, and TypeScript; deep learning architectures from C N Ns to transformers; the modern generative A I toolkit including BERT, retrieval-augmented generation, and multi-agent pipelines; full-stack frameworks like React, Angular, and Node; cloud tools on A W S; and B I platforms like Power B I and Tableau."
+    ]},
+    {id:'certs', sentences:[
+      "I hold certifications from Google, Microsoft, Amazon, Meta, Netflix, I B M, DeepLearning dot A I, and Tableau.",
+      "I was also a finalist at the Goldman Sachs National Level Hackathon, where my team built a real-time fraud detection system using graph neural networks in a twenty-four hour sprint."
+    ]},
+    {id:'contact', sentences:[
+      "If you'd like to work together, or just say hi, you can reach me by email, connect on LinkedIn, or check out my code on GitHub — all linked below.",
+      "Thanks for stopping by my portfolio."
+    ]}
+  ];
+
+  // build progress dots
+  const progressEl = document.getElementById('narratorProgress');
+  NARRATION.forEach((sec,i)=>{
+    const b = document.createElement('button');
+    b.className='dot';
+    b.title = sec.id;
+    b.dataset.index = i;
+    b.addEventListener('click', ()=> playFromSection(i));
+    progressEl.appendChild(b);
+  });
+  const dots = progressEl.querySelectorAll('.dot');
+
+  let voices = [];
+  function loadVoices(){ voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : []; }
+  if('speechSynthesis' in window){
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
+  function pickVoice(){
+    const enVoices = voices.filter(v=>v.lang && v.lang.toLowerCase().startsWith('en'));
+    const preferred = enVoices.find(v=>/female|samantha|google us english|zira/i.test(v.name)) || enVoices[0];
+    return preferred || voices[0];
+  }
+
+  let queue = [];
+  let qIndex = 0;
+  let isPaused = false;
+  let isPlaying = false;
+
+  const toggleBtn = document.getElementById('narratorToggle');
+  const stopBtn = document.getElementById('narratorStop');
+  const captionEl = document.getElementById('narratorCaption');
+
+  function flattenAll(){
+    const q = [];
+    NARRATION.forEach((sec, secIndex)=> sec.sentences.forEach(text=> q.push({secIndex, text})) );
+    return q;
+  }
+
+  function clearActiveSection(){
+    document.querySelectorAll('main section.narrating').forEach(s=>s.classList.remove('narrating'));
+  }
+
+  function setActiveDot(idx){
+    dots.forEach((d,i)=>{
+      d.classList.toggle('active', i===idx);
+      d.classList.toggle('done', i<idx);
+    });
+  }
+
+  function speakNext(){
+    if(qIndex >= queue.length){
+      isPlaying = false;
+      toggleBtn.textContent = '▶';
+      captionEl.textContent = 'Tap play to hear Aditi walk through this portfolio';
+      clearActiveSection();
+      setActiveDot(-1);
+      return;
+    }
+    const item = queue[qIndex];
+    const sec = NARRATION[item.secIndex];
+    clearActiveSection();
+    const secEl = document.getElementById(sec.id);
+    if(secEl){
+      secEl.classList.add('narrating');
+      secEl.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+    setActiveDot(item.secIndex);
+    captionEl.textContent = item.text;
+
+    if(!('speechSynthesis' in window)){
+      // fallback: no TTS support, just auto-advance captions
+      setTimeout(()=>{ qIndex++; speakNext(); }, 2200);
+      return;
+    }
+    const utt = new SpeechSynthesisUtterance(item.text);
+    const v = pickVoice();
+    if(v) utt.voice = v;
+    utt.rate = 1.0;
+    utt.pitch = 1.0;
+    utt.onend = ()=>{ qIndex++; speakNext(); };
+    utt.onerror = ()=>{ qIndex++; speakNext(); };
+    window.speechSynthesis.speak(utt);
+  }
+
+  function startQueue(newQueue, startAt){
+    if('speechSynthesis' in window) window.speechSynthesis.cancel();
+    queue = newQueue;
+    qIndex = startAt || 0;
+    isPlaying = true;
+    isPaused = false;
+    toggleBtn.textContent = '⏸';
+    speakNext();
+  }
+
+  function playFullTour(){
+    startQueue(flattenAll(), 0);
+  }
+
+  function playFromSection(secIndex){
+    const all = flattenAll();
+    const startAt = all.findIndex(item=>item.secIndex===secIndex);
+    startQueue(all, startAt === -1 ? 0 : startAt);
+  }
+
+  toggleBtn.addEventListener('click', ()=>{
+    if(!('speechSynthesis' in window)){
+      captionEl.textContent = "Your browser doesn't support voice narration — try Chrome or Edge.";
+      return;
+    }
+    if(isPlaying && !isPaused){
+      window.speechSynthesis.pause();
+      isPaused = true;
+      toggleBtn.textContent = '▶';
+    } else if(isPlaying && isPaused){
+      window.speechSynthesis.resume();
+      isPaused = false;
+      toggleBtn.textContent = '⏸';
+    } else {
+      playFullTour();
+    }
+  });
+
+  stopBtn.addEventListener('click', ()=>{
+    if('speechSynthesis' in window) window.speechSynthesis.cancel();
+    isPlaying = false;
+    isPaused = false;
+    qIndex = queue.length;
+    toggleBtn.textContent = '▶';
+    captionEl.textContent = 'Tap play to hear Aditi walk through this portfolio';
+    clearActiveSection();
+    setActiveDot(-1);
+  });
+</script>
+
+</body>
+</html>
