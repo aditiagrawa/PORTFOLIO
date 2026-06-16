@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuralMind — AI Memory Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #363636;
+    --surface: #0d1117;
+    --surface2: #161b27;
+    --surface3: #1e2535;
+    --border: rgba(99,179,237,0.12);
+    --accent: #63b3ed;
+    --accent2: #9f7aea;
+    --accent3: #68d391;
+    --accent4: #f6ad55;
+    --accent5: #fc8181;
+    --text: #e2e8f0;
+    --muted: #718096;
+    --glow: rgba(99,179,237,0.15);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  /* GRID BG */
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image: linear-gradient(rgba(99,179,237,0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(99,179,237,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(5,8,16,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #63b3ed, #9f7aea);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .logo-dot { width: 8px; height: 8px; background: #63b3ed; border-radius: 50%; animation: pulse-dot 2s infinite; -webkit-text-fill-color: initial; }
+  @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.5)} }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: color 0.2s; letter-spacing: 0.05em; text-transform: uppercase; }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta { background: linear-gradient(135deg, #63b3ed, #9f7aea); border: none; color: white; padding: 0.5rem 1.2rem; border-radius: 6px; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.8rem; cursor: pointer; transition: opacity 0.2s; }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* MAIN WRAPPER */
+  .wrapper { position: relative; z-index: 1; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  .orb1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(99,179,237,0.12), transparent 70%); top: -200px; left: -200px; }
+  .orb2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(159,122,234,0.1), transparent 70%); bottom: -100px; right: -100px; }
+  .orb3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(104,211,145,0.08), transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(99,179,237,0.08); border: 1px solid rgba(99,179,237,0.2);
+    padding: 0.4rem 1rem; border-radius: 100px; margin-bottom: 2rem;
+    font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--accent);
+    animation: fadeInUp 0.6s ease both;
+  }
+  .hero-badge-dot { width: 6px; height: 6px; background: var(--accent3); border-radius: 50%; animation: pulse-dot 1.5s infinite; }
+
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 0.6s ease 0.1s both;
+  }
+  .hero h1 .line1 { display: block; color: var(--text); }
+  .hero h1 .line2 {
+    display: block;
+    background: linear-gradient(135deg, #63b3ed 0%, #9f7aea 50%, #fc8181 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .hero-sub {
+    font-size: 1.1rem; color: var(--muted); max-width: 560px; margin: 0 auto 2.5rem;
+    line-height: 1.7; font-weight: 400; animation: fadeInUp 0.6s ease 0.2s both;
+  }
+  .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; animation: fadeInUp 0.6s ease 0.3s both; }
+  .btn-primary {
+    background: linear-gradient(135deg, #63b3ed, #9f7aea);
+    color: white; border: none; padding: 0.9rem 2rem; border-radius: 8px;
+    font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.95rem;
+    cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 30px rgba(99,179,237,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(99,179,237,0.5); }
+  .btn-secondary {
+    background: transparent; color: var(--text); border: 1px solid var(--border);
+    padding: 0.9rem 2rem; border-radius: 8px;
+    font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.95rem;
+    cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); background: rgba(99,179,237,0.05); }
+
+  /* STATS ROW */
+  .stats-row {
+    display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+    padding: 1.5rem; margin-top: 3rem;
+    animation: fadeInUp 0.6s ease 0.4s both;
+  }
+  .stat { text-align: center; }
+  .stat-val { font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.2rem; font-family: 'JetBrains Mono', monospace; }
+
+  /* SECTIONS */
+  section { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
+  .section-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.75rem; }
+  .section-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 1rem; }
+  .section-sub { color: var(--muted); font-size: 1rem; max-width: 560px; line-height: 1.7; margin-bottom: 3rem; }
+
+  /* DASHBOARD */
+  #dashboard { padding-top: 2rem; }
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 1rem;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .card:hover { border-color: rgba(99,179,237,0.3); box-shadow: 0 0 30px rgba(99,179,237,0.05); }
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover::before { opacity: 1; }
+  .card-wide { grid-column: span 2; }
+  .card-tall { grid-row: span 2; }
+  .card-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.75rem; }
+  .card-value { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.3rem; }
+  .card-sub { font-size: 0.8rem; color: var(--muted); }
+
+  /* SCORE RING */
+  .score-ring-wrap { display: flex; align-items: center; gap: 1.5rem; }
+  .ring-svg { transform: rotate(-90deg); }
+  .ring-track { fill: none; stroke: var(--surface3); stroke-width: 6; }
+  .ring-fill { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1); }
+  .ring-info { flex: 1; }
+  .ring-score { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.04em; }
+  .ring-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-family: 'JetBrains Mono', monospace; }
+
+  /* MINI BAR */
+  .mini-bars { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem; }
+  .mini-bar-row { display: flex; align-items: center; gap: 0.75rem; }
+  .mini-bar-label { font-size: 0.75rem; color: var(--muted); width: 80px; flex-shrink: 0; }
+  .mini-bar-track { flex: 1; height: 4px; background: var(--surface3); border-radius: 2px; overflow: hidden; }
+  .mini-bar-fill { height: 100%; border-radius: 2px; transition: width 1s ease; }
+  .mini-bar-val { font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; width: 30px; text-align: right; }
+
+  /* HEARTBEAT CHART */
+  .hb-chart { width: 100%; height: 80px; position: relative; }
+  .hb-chart svg { width: 100%; height: 100%; }
+
+  /* PREDICTION CARDS */
+  .predictions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 2rem; }
+  .pred-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .pred-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+  .pred-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+  .pred-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.3rem; }
+  .pred-val { font-size: 1.8rem; font-weight: 800; }
+  .pred-desc { font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; }
+  .pred-glow { position: absolute; top: -30px; right: -30px; width: 100px; height: 100px; border-radius: 50%; filter: blur(40px); opacity: 0.3; }
+
+  /* AI CHAT */
+  .ai-section { padding: 5rem 2rem; }
+  .ai-container {
+    max-width: 900px; margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .ai-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 0.75rem;
+    background: var(--surface2);
+  }
+  .ai-avatar {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, #63b3ed, #9f7aea);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+  }
+  .ai-name { font-weight: 700; font-size: 0.95rem; }
+  .ai-status { font-size: 0.7rem; color: var(--accent3); font-family: 'JetBrains Mono', monospace; }
+  .ai-status::before { content: '● '; }
+  .chat-messages {
+    padding: 1.5rem;
+    min-height: 300px; max-height: 400px;
+    overflow-y: auto;
+    display: flex; flex-direction: column; gap: 1rem;
+  }
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-track { background: transparent; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 2px; }
+  .msg { display: flex; gap: 0.75rem; animation: fadeInUp 0.3s ease; }
+  .msg.user { flex-direction: row-reverse; }
+  .msg-avatar { width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+  .msg.ai .msg-avatar { background: linear-gradient(135deg, #63b3ed, #9f7aea); }
+  .msg.user .msg-avatar { background: var(--surface3); color: var(--text); }
+  .msg-bubble { max-width: 75%; padding: 0.75rem 1rem; border-radius: 12px; font-size: 0.875rem; line-height: 1.6; }
+  .msg.ai .msg-bubble { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px 12px 12px 2px; }
+  .msg.user .msg-bubble { background: linear-gradient(135deg, rgba(99,179,237,0.2), rgba(159,122,234,0.2)); border: 1px solid rgba(99,179,237,0.2); border-radius: 12px 12px 2px 12px; }
+  .typing-indicator { display: flex; gap: 4px; align-items: center; padding: 0.5rem; }
+  .typing-dot { width: 6px; height: 6px; background: var(--muted); border-radius: 50%; animation: typing 1.2s infinite; }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typing { 0%,100%{opacity:0.3;transform:translateY(0)} 50%{opacity:1;transform:translateY(-4px)} }
+  .chat-input-area {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex; gap: 0.75rem; align-items: flex-end;
+    background: var(--surface2);
+  }
+  .chat-input {
+    flex: 1; background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 0.75rem 1rem;
+    color: var(--text); font-family: 'Syne', sans-serif; font-size: 0.875rem;
+    resize: none; min-height: 44px; max-height: 120px;
+    outline: none; transition: border-color 0.2s;
+    line-height: 1.5;
+  }
+  .chat-input:focus { border-color: rgba(99,179,237,0.4); }
+  .chat-input::placeholder { color: var(--muted); }
+  .chat-send {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: linear-gradient(135deg, #63b3ed, #9f7aea);
+    border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; transition: opacity 0.2s, transform 0.2s;
+    flex-shrink: 0;
+  }
+  .chat-send:hover { opacity: 0.85; transform: scale(1.05); }
+  .chat-send:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .quick-prompts { padding: 0.75rem 1.5rem 0; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .qp { background: var(--surface3); border: 1px solid var(--border); color: var(--muted); padding: 0.3rem 0.75rem; border-radius: 100px; font-size: 0.72rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; font-family: 'Syne', sans-serif; }
+  .qp:hover { border-color: var(--accent); color: var(--accent); background: rgba(99,179,237,0.05); }
+
+  /* DATA INPUT SECTION */
+  .data-section { padding: 3rem 2rem 5rem; }
+  .data-container { max-width: 900px; margin: 0 auto; }
+  .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+  .data-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+  }
+  .data-card h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+  .data-icon { font-size: 1.2rem; }
+  .slider-wrap { display: flex; flex-direction: column; gap: 0.75rem; }
+  .slider-row { display: flex; flex-direction: column; gap: 0.3rem; }
+  .slider-header { display: flex; justify-content: space-between; font-size: 0.8rem; }
+  .slider-name { color: var(--muted); }
+  .slider-val { color: var(--accent); font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+  input[type=range] {
+    -webkit-appearance: none; width: 100%; height: 4px;
+    background: var(--surface3); border-radius: 2px; outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px;
+    border-radius: 50%; background: var(--accent); cursor: pointer;
+    box-shadow: 0 0 8px rgba(99,179,237,0.4);
+  }
+  .analyze-btn {
+    width: 100%; margin-top: 1.5rem;
+    background: linear-gradient(135deg, #63b3ed, #9f7aea);
+    border: none; color: white; padding: 1rem; border-radius: 10px;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem;
+    cursor: pointer; transition: opacity 0.2s, transform 0.2s;
+    letter-spacing: 0.05em;
+  }
+  .analyze-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .analyze-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* TIMELINE */
+  .timeline { padding: 3rem 0; }
+  .timeline-item { display: flex; gap: 1.5rem; padding: 1rem 0; position: relative; }
+  .timeline-item::after { content:''; position:absolute; left:11px; top:3rem; bottom:-1rem; width:1px; background: var(--border); }
+  .timeline-item:last-child::after { display:none; }
+  .timeline-dot { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display:flex; align-items:center; justify-content:center; font-size: 0.65rem; font-weight:700; margin-top:2px; }
+  .timeline-content h4 { font-size:0.9rem; font-weight:700; margin-bottom:0.25rem; }
+  .timeline-content p { font-size:0.8rem; color:var(--muted); line-height:1.5; }
+  .timeline-time { font-size:0.7rem; color:var(--muted); font-family:'JetBrains Mono',monospace; margin-top:0.3rem; }
+
+  /* TECH STACK */
+  .tech-section { padding: 3rem 2rem 5rem; }
+  .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; max-width: 900px; margin: 0 auto; }
+  .tech-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .tech-item:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .tech-emoji { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .tech-name { font-size: 0.85rem; font-weight: 700; }
+  .tech-role { font-size: 0.7rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-family: 'JetBrains Mono', monospace;
+    position: relative; z-index: 1;
+  }
+
+  /* ANALYSIS RESULT */
+  .analysis-result {
+    background: var(--surface2);
+    border: 1px solid rgba(99,179,237,0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    display: none;
+    animation: fadeInUp 0.4s ease;
+  }
+  .analysis-result.show { display: block; }
+  .analysis-result h3 { font-size: 0.85rem; color: var(--accent); font-family: 'JetBrains Mono', monospace; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.1em; }
+  .analysis-text { font-size: 0.875rem; line-height: 1.8; color: var(--text); }
+
+  /* LOADING SPINNER */
+  .spinner { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.2); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ANIMATIONS */
+  @keyframes fadeInUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+  /* RESPONSIVE */
+  @media(max-width:768px) {
+    .dashboard-grid { grid-template-columns: 1fr; }
+    .card-wide { grid-column: span 1; }
+    .nav-links { display: none; }
+    .stats-row { gap: 1.5rem; }
+  }
+
+  /* SCROLL REVEAL */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s, transform 0.6s; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* TAG */
+  .tag { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.6rem; border-radius: 100px; font-size: 0.65rem; font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+  .tag-green { background: rgba(104,211,145,0.1); color: var(--accent3); border: 1px solid rgba(104,211,145,0.2); }
+  .tag-blue { background: rgba(99,179,237,0.1); color: var(--accent); border: 1px solid rgba(99,179,237,0.2); }
+  .tag-orange { background: rgba(246,173,85,0.1); color: var(--accent4); border: 1px solid rgba(246,173,85,0.2); }
+  .tag-red { background: rgba(252,129,129,0.1); color: var(--accent5); border: 1px solid rgba(252,129,129,0.2); }
+  .tag-purple { background: rgba(159,122,234,0.1); color: var(--accent2); border: 1px solid rgba(159,122,234,0.2); }
+
+  /* WAVE CHART */
+  .wave-container { width: 100%; height: 80px; overflow: hidden; position: relative; }
+  canvas { width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    NeuralMind
+  </div>
+  <div class="nav-links">
+    <a href="#dashboard">Dashboard</a>
+    <a href="#predict">Predictions</a>
+    <a href="#analyze">Analyze</a>
+    <a href="#ai-chat">AI Chat</a>
+    <a href="#tech">Stack</a>
+  </div>
+  <button class="nav-cta" onclick="document.getElementById('dashboard').scrollIntoView({behavior:'smooth'})">Open Dashboard →</button>
+</nav>
+
+<div class="wrapper">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg-orb orb1"></div>
+  <div class="hero-bg-orb orb2"></div>
+  <div class="hero-bg-orb orb3"></div>
+  <div>
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      v2.0 · Live Behavioral Intelligence
+    </div>
+    <h1>
+      <span class="line1">Know Yourself</span>
+      <span class="line2">Before You Break</span>
+    </h1>
+    <p class="hero-sub">NeuralMind watches your patterns — sleep, typing rhythm, focus, calendar load — and predicts burnout, stress peaks, and optimal productivity windows before they happen.</p>
+    <div class="hero-buttons">
+      <button class="btn-primary" onclick="document.getElementById('dashboard').scrollIntoView({behavior:'smooth'})">🧠 View My Brain Dashboard</button>
+      <button class="btn-secondary" onclick="document.getElementById('ai-chat').scrollIntoView({behavior:'smooth'})">Talk to NeuralMind →</button>
+    </div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-val">94%</div><div class="stat-label">Burnout Accuracy</div></div>
+      <div class="stat"><div class="stat-val">6</div><div class="stat-label">Data Signals</div></div>
+      <div class="stat"><div class="stat-val">Real-Time</div><div class="stat-label">AI Analysis</div></div>
+      <div class="stat"><div class="stat-val">LLM+RL</div><div class="stat-label">Powered</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="reveal">
+  <div class="section-tag">// core_module_01</div>
+  <div class="section-title">Your Neural Dashboard</div>
+  <div class="section-sub">Live behavioral metrics updated from your activity patterns. All signals processed through our LLM memory engine.</div>
+
+  <div class="dashboard-grid">
+
+    <!-- Wellbeing Score -->
+    <div class="card">
+      <div class="card-label">Wellbeing Index</div>
+      <div class="score-ring-wrap">
+        <svg class="ring-svg" width="80" height="80" viewBox="0 0 80 80">
+          <circle class="ring-track" cx="40" cy="40" r="34"/>
+          <circle class="ring-fill" id="wellbeing-ring" cx="40" cy="40" r="34"
+            stroke="url(#rg1)"
+            stroke-dasharray="213.6"
+            stroke-dashoffset="213.6"/>
+          <defs>
+            <linearGradient id="rg1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#63b3ed"/>
+              <stop offset="100%" stop-color="#9f7aea"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="ring-info">
+          <div class="ring-score" id="wellbeing-score" style="color:#63b3ed">74</div>
+          <div class="ring-label">/ 100</div>
+          <div style="margin-top:0.5rem"><span class="tag tag-green">↑ 3pts today</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Focus Level -->
+    <div class="card">
+      <div class="card-label">Focus Level</div>
+      <div class="card-value" id="focus-val" style="color:#68d391">82%</div>
+      <div class="card-sub">Deep work capacity</div>
+      <div class="wave-container" style="margin-top:0.75rem">
+        <canvas id="focus-wave"></canvas>
+      </div>
+    </div>
+
+    <!-- Stress Meter -->
+    <div class="card">
+      <div class="card-label">Stress Indicator</div>
+      <div class="card-value" id="stress-val" style="color:#f6ad55">43%</div>
+      <div class="card-sub">Moderate — manageable</div>
+      <div class="mini-bars" style="margin-top:1rem">
+        <div class="mini-bar-row">
+          <div class="mini-bar-label">Cognitive</div>
+          <div class="mini-bar-track"><div class="mini-bar-fill" style="width:55%;background:#f6ad55"></div></div>
+          <div class="mini-bar-val" style="color:#f6ad55">55</div>
+        </div>
+        <div class="mini-bar-row">
+          <div class="mini-bar-label">Physical</div>
+          <div class="mini-bar-track"><div class="mini-bar-fill" style="width:30%;background:#68d391"></div></div>
+          <div class="mini-bar-val" style="color:#68d391">30</div>
+        </div>
+        <div class="mini-bar-row">
+          <div class="mini-bar-label">Emotional</div>
+          <div class="mini-bar-track"><div class="mini-bar-fill" style="width:45%;background:#63b3ed"></div></div>
+          <div class="mini-bar-val" style="color:#63b3ed">45</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Productivity Timeline - wide card -->
+    <div class="card card-wide">
+      <div class="card-label">Productivity Windows — Today</div>
+      <div id="prod-bars" style="display:flex;gap:3px;align-items:flex-end;height:60px;margin-top:0.5rem"></div>
+      <div style="display:flex;gap:1rem;margin-top:0.75rem;flex-wrap:wrap">
+        <div style="font-size:0.75rem;color:var(--muted)"><span style="color:#68d391">■</span> Peak Zone</div>
+        <div style="font-size:0.75rem;color:var(--muted)"><span style="color:#63b3ed">■</span> Flow State</div>
+        <div style="font-size:0.75rem;color:var(--muted)"><span style="color:#f6ad55">■</span> Recovery</div>
+        <div style="font-size:0.75rem;color:var(--muted)"><span style="color:#fc8181">■</span> Rest</div>
+      </div>
+      <div style="margin-top:0.75rem;padding:0.75rem;background:var(--surface2);border-radius:8px;border:1px solid var(--border)">
+        <span class="tag tag-green">🎯 Next Peak: 2PM – 4PM</span>
+        <span style="font-size:0.8rem;color:var(--muted);margin-left:0.75rem">Schedule your hardest tasks here</span>
+      </div>
+    </div>
+
+    <!-- Sleep Score -->
+    <div class="card">
+      <div class="card-label">Sleep Quality</div>
+      <div class="card-value" style="color:#9f7aea">7.2h</div>
+      <div class="card-sub">REM: 22% · Deep: 18%</div>
+      <div class="mini-bars" style="margin-top:1rem">
+        <div class="mini-bar-row">
+          <div class="mini-bar-label">Quality</div>
+          <div class="mini-bar-track"><div class="mini-bar-fill" style="width:72%;background:#9f7aea"></div></div>
+          <div class="mini-bar-val" style="color:#9f7aea">72</div>
+        </div>
+        <div class="mini-bar-row">
+          <div class="mini-bar-label">Consistency</div>
+          <div class="mini-bar-track"><div class="mini-bar-fill" style="width:68%;background:#63b3ed"></div></div>
+          <div class="mini-bar-val" style="color:#63b3ed">68</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Burnout Risk -->
+    <div class="card">
+      <div class="card-label">Burnout Risk</div>
+      <div class="card-value" id="burnout-val" style="color:#68d391">LOW</div>
+      <div class="card-sub" id="burnout-sub">No critical signals detected</div>
+      <div style="margin-top:1rem">
+        <div class="timeline">
+          <div class="timeline-item" style="padding:0.5rem 0">
+            <div class="timeline-dot" style="background:rgba(104,211,145,0.2);color:#68d391;border:1px solid rgba(104,211,145,0.3)">✓</div>
+            <div class="timeline-content">
+              <div style="font-size:0.75rem;color:var(--muted)">Work hours within healthy range</div>
+            </div>
+          </div>
+          <div class="timeline-item" style="padding:0.5rem 0">
+            <div class="timeline-dot" style="background:rgba(246,173,85,0.2);color:#f6ad55;border:1px solid rgba(246,173,85,0.3)">!</div>
+            <div class="timeline-content">
+              <div style="font-size:0.75rem;color:var(--muted)">Meeting load elevated this week</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PREDICTIONS -->
+<section id="predict" class="reveal">
+  <div class="section-tag">// prediction_engine</div>
+  <div class="section-title">AI Predictions</div>
+  <div class="section-sub">NeuralMind's LLM + behavioral embeddings generate these forecasts from your behavioral data.</div>
+
+  <div class="predictions-grid">
+    <div class="pred-card" onclick="askAbout('burnout')">
+      <div class="pred-glow" style="background:#fc8181"></div>
+      <div class="pred-icon">🔥</div>
+      <div class="pred-title">Burnout Risk</div>
+      <div class="pred-val" style="color:#68d391">LOW</div>
+      <div class="pred-desc">Forecast: stable for next 7 days</div>
+      <div style="margin-top:0.75rem"><span class="tag tag-green">Confidence: 91%</span></div>
+    </div>
+    <div class="pred-card" onclick="askAbout('stress')">
+      <div class="pred-glow" style="background:#f6ad55"></div>
+      <div class="pred-icon">😤</div>
+      <div class="pred-title">Stress Peak</div>
+      <div class="pred-val" style="color:#f6ad55">WED</div>
+      <div class="pred-desc">Calendar load spikes Thursday</div>
+      <div style="margin-top:0.75rem"><span class="tag tag-orange">Confidence: 78%</span></div>
+    </div>
+    <div class="pred-card" onclick="askAbout('focus')">
+      <div class="pred-glow" style="background:#68d391"></div>
+      <div class="pred-icon">🎯</div>
+      <div class="pred-title">Peak Focus</div>
+      <div class="pred-val" style="color:#68d391">2–4PM</div>
+      <div class="pred-desc">Optimal deep work window today</div>
+      <div style="margin-top:0.75rem"><span class="tag tag-green">Confidence: 88%</span></div>
+    </div>
+    <div class="pred-card" onclick="askAbout('emotion')">
+      <div class="pred-glow" style="background:#9f7aea"></div>
+      <div class="pred-icon">💜</div>
+      <div class="pred-title">Emotional State</div>
+      <div class="pred-val" style="color:#9f7aea">CALM</div>
+      <div class="pred-desc">Positive baseline detected</div>
+      <div style="margin-top:0.75rem"><span class="tag tag-purple">Confidence: 84%</span></div>
+    </div>
+    <div class="pred-card" onclick="askAbout('sleep')">
+      <div class="pred-glow" style="background:#63b3ed"></div>
+      <div class="pred-icon">🌙</div>
+      <div class="pred-title">Sleep Debt</div>
+      <div class="pred-val" style="color:#63b3ed">1.2h</div>
+      <div class="pred-desc">Minor — recommend 8h tonight</div>
+      <div style="margin-top:0.75rem"><span class="tag tag-blue">Confidence: 95%</span></div>
+    </div>
+    <div class="pred-card" onclick="askAbout('productivity')">
+      <div class="pred-glow" style="background:#68d391"></div>
+      <div class="pred-icon">⚡</div>
+      <div class="pred-title">Productivity Score</div>
+      <div class="pred-val" style="color:#68d391">8.1/10</div>
+      <div class="pred-desc">Top 15% of your personal history</div>
+      <div style="margin-top:0.75rem"><span class="tag tag-green">Confidence: 87%</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA INPUT / ANALYZE -->
+<div class="data-section reveal" id="analyze">
+  <div class="data-container">
+    <div class="section-tag">// behavioral_input</div>
+    <div class="section-title">Feed Your Data</div>
+    <div class="section-sub">Adjust your current behavioral signals. NeuralMind AI analyzes the pattern and generates personalized predictions.</div>
+
+    <div class="data-grid">
+      <div class="data-card">
+        <h3><span class="data-icon">😴</span> Sleep & Recovery</h3>
+        <div class="slider-wrap">
+          <div class="slider-row">
+            <div class="slider-header"><span class="slider-name">Sleep Hours</span><span class="slider-val" id="v-sleep">7h</span></div>
+            <input type="range" min="3" max="10" value="7" step="0.5" oninput="updateSlider('sleep',this.value,'h')">
+          </div>
+          <div class="slider-row">
+            <div class="slider-header"><span class="slider-name">Sleep Quality</span><span class="slider-val" id="v-quality">70%</span></div>
+            <input type="range" min="0" max="100" value="70" oninput="updateSlider('quality',this.value,'%')">
+          </div>
+          <div class="slider-row">
+            <div class="slider-header"><span class="slider-name">Consistency</span><span class="slider-val" id="v-consist">65%</span></div>
+            <input type="range" min="0" max="100" value="65" oninput="updateSlider('consist',this.value,'%')">
+          </div>
+        </div>
+      </div>
+
+      <div class="data-card">
+        <h3><span class="data-icon">💻</span> Work Patterns</h3>
+        <div class="slider-wrap">
+          <div class="slider-row">
+            <div class="slider-header"><span class="slider-name">Work Hours/Day</span><span class="slider-val" id="v-work">8h</span></div>
+            <input type="range" min="2" max="16" value="8" oninput="updateSlider('work',this.value,'h')">
+          </div>
+          <div class="slider-row">
+            <div class="slider-header"><span class="slider-name">Meeting Load</span><span class="slider-val" id="v-meetings">40%</span></div>
+            <input type="range" min="0" max="100" value="40" oninput="updateSlider('meetings',this.value,'%')">
+          </div>
+          <div class="slider-row">
+            <div class="slider-header"><span class="slider-name">Focus Blocks</span><span class="slider-val" id="v-focus">3</span></div>
+            <input type="range" min="0" max="8" value="3" oninput="updateSlider('focus',this.value,'')">
+          </div>
+        </div>
+      </div>
+
+      <div class="data-card">
+        <h3><span class="data-icon">🧘</span> Wellbeing Signals</h3>
+        <div class="slider-wrap">
+          <div class="slider-row">
+            <div class="slider-header"><span class="slider-name">Stress Level</span><span class="slider-val" id="v-stress">40%</span></div>
+            <input type="range" min="0" max="100" value="40" oninput="updateSlider('stress',this.value,'%')">
+          </div>
+          <div class="slider-row">
+            <div class="slider-header"><span class="slider-name">Energy Level</span><span class="slider-val" id="v-energy">70%</span></div>
+            <input type="range" min="0" max="100" value="70" oninput="updateSlider('energy',this.value,'%')">
+          </div>
+          <div class="slider-row">
+            <div class="slider-header"><span class="slider-name">Social Interaction</span><span class="slider-val" id="v-social">50%</span></div>
+            <input type="range" min="0" max="100" value="50" oninput="updateSlider('social',this.value,'%')">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="analyze-btn" id="analyze-btn" onclick="runAnalysis()">
+      🧠 Analyze My Behavioral Profile
+    </button>
+
+    <div class="analysis-result" id="analysis-result">
+      <h3>// AI Analysis Report</h3>
+      <div class="analysis-text" id="analysis-text"></div>
+    </div>
+  </div>
+</div>
+
+<!-- AI CHAT -->
+<div class="ai-section reveal" id="ai-chat">
+  <div style="max-width:900px;margin:0 auto">
+    <div class="section-tag">// llm_memory_engine</div>
+    <div class="section-title">Talk to NeuralMind</div>
+    <div class="section-sub" style="margin-bottom:2rem">Your personal AI that understands your behavioral patterns. Ask anything about your wellbeing, focus, stress, or get personalized advice.</div>
+  </div>
+  <div class="ai-container">
+    <div class="ai-header">
+      <div class="ai-avatar">🧠</div>
+      <div>
+        <div class="ai-name">NeuralMind AI</div>
+        <div class="ai-status">Online · Behavioral Memory Active</div>
+      </div>
+    </div>
+    <div class="quick-prompts">
+      <button class="qp" onclick="setPrompt('Am I at risk of burnout this week?')">Burnout risk?</button>
+      <button class="qp" onclick="setPrompt('When is my best time to do deep work today?')">Best focus time?</button>
+      <button class="qp" onclick="setPrompt('How is my sleep affecting my productivity?')">Sleep & productivity</button>
+      <button class="qp" onclick="setPrompt('Give me a personalized wellbeing plan for this week')">Wellbeing plan</button>
+      <button class="qp" onclick="setPrompt('What are my behavioral anomalies this week?')">Anomalies</button>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+      <div class="msg ai">
+        <div class="msg-avatar">🧠</div>
+        <div class="msg-bubble">
+          Hey! I'm NeuralMind — your personal behavioral AI. I've analyzed your patterns across sleep, focus, work load, and communication style.<br><br>
+          Your current wellbeing index is <strong>74/100</strong> — pretty solid! Your peak productivity window today is <strong>2–4 PM</strong>. Burnout risk is <strong>LOW</strong>.<br><br>
+          What would you like to explore? I can predict stress peaks, optimize your schedule, or just chat about how you're doing. 🎯
+        </div>
+      </div>
+    </div>
+    <div class="chat-input-area">
+      <textarea class="chat-input" id="chat-input" placeholder="Ask NeuralMind anything about your wellbeing..." rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage()}"
+        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+      <button class="chat-send" id="chat-send" onclick="sendMessage()">↑</button>
+    </div>
+  </div>
+</div>
+
+<!-- TECH STACK -->
+<div class="tech-section reveal" id="tech">
+  <div style="max-width:900px;margin:0 auto">
+    <div class="section-tag">// architecture</div>
+    <div class="section-title">Technology Stack</div>
+    <div class="section-sub" style="margin-bottom:2rem">Built on cutting-edge AI infrastructure — LLM memory, behavioral embeddings, reinforcement learning, and emotion AI.</div>
+    <div class="tech-grid">
+      <div class="tech-item">
+        <div class="tech-emoji">🐍</div>
+        <div class="tech-name">Python</div>
+        <div class="tech-role">Core Backend</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-emoji">🦜</div>
+        <div class="tech-name">LangChain</div>
+        <div class="tech-role">LLM Memory Engine</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-emoji">🤖</div>
+        <div class="tech-name">GPT / Llama</div>
+        <div class="tech-role">Language Model</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-emoji">🧬</div>
+        <div class="tech-name">TensorFlow</div>
+        <div class="tech-role">Behavioral Embeddings</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-emoji">⚡</div>
+        <div class="tech-name">FastAPI</div>
+        <div class="tech-role">REST API Backend</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-emoji">🍃</div>
+        <div class="tech-name">MongoDB</div>
+        <div class="tech-role">Behavioral Memory DB</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-emoji">⚛️</div>
+        <div class="tech-name">React</div>
+        <div class="tech-role">Frontend Interface</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-emoji">🎭</div>
+        <div class="tech-name">Emotion AI</div>
+        <div class="tech-role">Sentiment Analysis</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-emoji">🔄</div>
+        <div class="tech-name">RL Agent</div>
+        <div class="tech-role">Adaptive Learning</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>NeuralMind — AI Memory Engine for Human Behavior Prediction</div>
+  <div style="margin-top:0.5rem;color:var(--surface3)">Powered by LLM + Behavioral Embeddings + Reinforcement Learning</div>
+</footer>
+
+</div><!-- /wrapper -->
+
+<script>
+// ============ UTILITY ============
+function updateSlider(id, val, unit) {
+  document.getElementById('v-'+id).textContent = val + unit;
+}
+
+// ============ PRODUCTIVITY BARS ============
+function renderProdBars() {
+  const container = document.getElementById('prod-bars');
+  const hours = ['6AM','7','8','9','10','11','12','1PM','2','3','4','5','6','7','8','9'];
+  const levels = [10,15,30,55,75,85,65,45,88,92,90,70,45,35,20,10];
+  const colors = ['#fc8181','#fc8181','#f6ad55','#63b3ed','#63b3ed','#68d391','#63b3ed','#f6ad55','#68d391','#68d391','#68d391','#63b3ed','#f6ad55','#fc8181','#fc8181','#fc8181'];
+  container.innerHTML = '';
+  levels.forEach((h, i) => {
+    const bar = document.createElement('div');
+    bar.style.cssText = `height:${h}%;width:calc(${100/levels.length}% - 3px);background:${colors[i]};border-radius:3px 3px 0 0;opacity:0.8;transition:height 0.5s ${i*0.03}s;position:relative;cursor:pointer;`;
+    bar.title = `${hours[i]}: ${h}% productivity`;
+    bar.onmouseenter = () => { bar.style.opacity = '1'; bar.style.transform = 'scaleY(1.05)'; };
+    bar.onmouseleave = () => { bar.style.opacity = '0.8'; bar.style.transform = 'scaleY(1)'; };
+    container.appendChild(bar);
+  });
+}
+
+// ============ FOCUS WAVE CANVAS ============
+function drawFocusWave() {
+  const canvas = document.getElementById('focus-wave');
+  if (!canvas) return;
+  canvas.width = canvas.offsetWidth * 2;
+  canvas.height = canvas.offsetHeight * 2;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(2, 2);
+  const w = canvas.offsetWidth, h = canvas.offsetHeight;
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    ctx.beginPath();
+    ctx.moveTo(0, h/2);
+    for (let x = 0; x < w; x++) {
+      const y = h/2 + Math.sin((x * 0.05) + t) * (h/3) * 0.6 + Math.sin((x * 0.08) + t*1.3) * (h/3) * 0.3;
+      ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = '#68d391';
+    ctx.lineWidth = 1.5;
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = '#68d391';
+    ctx.stroke();
+    t += 0.02;
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// ============ WELLBEING RING ============
+function animateRing(score) {
+  const ring = document.getElementById('wellbeing-ring');
+  const circumference = 213.6;
+  const offset = circumference - (score / 100) * circumference;
+  setTimeout(() => { ring.style.strokeDashoffset = offset; }, 500);
+}
+
+// ============ SCROLL REVEAL ============
+function setupReveal() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+// ============ AI ANALYSIS ============
+function getSliderValues() {
+  const vals = {};
+  ['sleep','quality','consist','work','meetings','focus','stress','energy','social'].forEach(id => {
+    const el = document.getElementById('v-'+id);
+    if (el) vals[id] = el.textContent;
+  });
+  return vals;
+}
+
+async function runAnalysis() {
+  const btn = document.getElementById('analyze-btn');
+  const resultDiv = document.getElementById('analysis-result');
+  const textDiv = document.getElementById('analysis-text');
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Analyzing behavioral profile...';
+
+  const vals = getSliderValues();
+
+  const prompt = `You are NeuralMind, an AI behavioral health engine. Analyze this person's behavioral data and provide a detailed, personalized report.
+
+Behavioral Data:
+- Sleep: ${vals.sleep} per night, Quality: ${vals.quality}, Consistency: ${vals.consist}
+- Work: ${vals.work}/day, Meeting load: ${vals.meetings}, Focus blocks: ${vals.focus}
+- Stress level: ${vals.stress}, Energy: ${vals.energy}, Social interaction: ${vals.social}
+
+Provide a structured analysis with:
+1. Overall wellbeing score (0-100)
+2. Burnout risk assessment (LOW/MEDIUM/HIGH with reasoning)
+3. Predicted peak productivity window
+4. Top 3 behavioral insights
+5. 2 specific, actionable recommendations
+
+Keep it personal, intelligent, and data-driven. Use emojis sparingly. Format nicely with clear sections.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.map(b => b.text || '').join('') || 'Analysis complete.';
+    resultDiv.classList.add('show');
+    textDiv.innerHTML = text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  } catch(e) {
+    resultDiv.classList.add('show');
+    textDiv.innerHTML = generateFallbackAnalysis(vals);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '🧠 Analyze My Behavioral Profile';
+  resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function generateFallbackAnalysis(vals) {
+  const sleep = parseFloat(vals.sleep);
+  const stress = parseInt(vals.stress);
+  const work = parseFloat(vals.work);
+  const energy = parseInt(vals.energy);
+  let burnout = stress > 70 || work > 12 ? 'MEDIUM-HIGH' : stress < 40 ? 'LOW' : 'MODERATE';
+  let score = Math.round(((sleep/10)*25) + ((100-stress)/100*25) + (energy/100*25) + ((12-Math.min(work,12))/10*25));
+  return `<strong>🧠 NeuralMind Behavioral Analysis</strong><br><br>
+<strong>Wellbeing Score: ${Math.min(score,95)}/100</strong><br><br>
+<strong>Burnout Risk: ${burnout}</strong><br>
+Based on your ${work} work hours and ${stress} stress level, your burnout trajectory looks ${burnout === 'LOW' ? 'stable' : 'worth monitoring'}.<br><br>
+<strong>Key Insights:</strong><br>
+• Sleep at ${sleep}h is ${sleep >= 7 ? 'within optimal range — your cognitive performance benefits' : 'slightly below recommended — aim for 7-8h for better focus'}<br>
+• Energy at ${energy}% suggests your ${energy > 60 ? 'recovery habits are working' : 'body needs more downtime'}<br>
+• Meeting load of ${vals.meetings} is ${parseInt(vals.meetings) > 60 ? 'high — this fragments deep work significantly' : 'manageable — good space for focus work'}<br><br>
+<strong>Recommended Actions:</strong><br>
+1. ${sleep < 7 ? 'Prioritize getting to bed 45 minutes earlier tonight' : 'Maintain your current sleep schedule — it\'s working'}<br>
+2. ${parseInt(vals.focus) < 3 ? 'Block 2-3 uninterrupted focus slots in your calendar daily' : 'You\'re already scheduling good focus time — protect those blocks'}`;
+}
+
+// ============ CHAT ============
+const chatHistory = [
+  { role: 'user', content: 'Initialize NeuralMind with user behavioral profile: Wellbeing 74/100, Burnout risk LOW, Focus peak 2-4PM, Sleep 7.2h, Stress 43%' },
+  { role: 'assistant', content: "Hey! I'm NeuralMind — your personal behavioral AI. I've analyzed your patterns. Wellbeing index: 74/100, Burnout risk: LOW, Peak productivity: 2–4 PM. What would you like to explore?" }
+];
+
+function setPrompt(text) {
+  document.getElementById('chat-input').value = text;
+  document.getElementById('chat-input').focus();
+}
+
+function askAbout(topic) {
+  const prompts = {
+    burnout: 'Tell me more about my burnout risk and what to watch for.',
+    stress: 'When will my stress peak this week and how can I prepare?',
+    focus: 'What are my optimal focus windows today and how do I maximize them?',
+    emotion: 'What does my emotional state analysis tell you about my patterns?',
+    sleep: 'How is my sleep debt affecting my performance?',
+    productivity: 'Break down my productivity score and give me improvement tips.'
+  };
+  setPrompt(prompts[topic] || 'Tell me more.');
+  document.getElementById('ai-chat').scrollIntoView({ behavior: 'smooth' });
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const sendBtn = document.getElementById('chat-send');
+  const text = input.value.trim();
+  if (!text || sendBtn.disabled) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+  sendBtn.disabled = true;
+
+  appendMsg('user', text);
+  chatHistory.push({ role: 'user', content: text });
+
+  const typingId = appendTyping();
+
+  const systemPrompt = `You are NeuralMind, an advanced AI behavioral intelligence system. You analyze human behavioral patterns to predict wellbeing, burnout, stress, focus, and productivity.
+
+The user's current profile:
+- Wellbeing Index: 74/100
+- Burnout Risk: LOW
+- Today's Peak Focus: 2-4 PM
+- Sleep: 7.2h (quality 72%)
+- Stress: 43% (Moderate)
+- Productivity Score: 8.1/10
+- Emotional State: CALM
+
+You are warm, insightful, data-driven, and speak like a brilliant personal health coach who happens to have PhD-level knowledge in psychology, neuroscience, and AI. Be concise but valuable. Max 3 paragraphs.`;
+
+  try {
+    const messages = chatHistory.slice(1).map(m => ({ role: m.role, content: m.content }));
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.map(b => b.text || '').join('') || getFallbackReply(text);
+    removeTyping(typingId);
+    appendMsg('ai', reply);
+    chatHistory.push({ role: 'assistant', content: reply });
+  } catch(e) {
+    removeTyping(typingId);
+    appendMsg('ai', getFallbackReply(text));
+  }
+
+  sendBtn.disabled = false;
+}
+
+function appendMsg(role, text) {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  const isAI = role === 'ai';
+  div.innerHTML = `
+    <div class="msg-avatar">${isAI ? '🧠' : '👤'}</div>
+    <div class="msg-bubble">${text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>
+  `;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function appendTyping() {
+  const container = document.getElementById('chat-messages');
+  const id = 'typing-' + Date.now();
+  const div = document.createElement('div');
+  div.className = 'msg ai';
+  div.id = id;
+  div.innerHTML = `<div class="msg-avatar">🧠</div><div class="msg-bubble"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  return id;
+}
+
+function removeTyping(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+function getFallbackReply(userMsg) {
+  const msg = userMsg.toLowerCase();
+  if (msg.includes('burnout')) return "Based on your behavioral profile, your burnout risk remains **LOW**. Your sleep regularity is solid and your work hours haven't crossed the 10h threshold consistently. The one flag I'm watching: your meeting load this week is 15% above your personal baseline. I'd recommend scheduling one \"no-meeting morning\" before Thursday.";
+  if (msg.includes('focus') || msg.includes('productivity')) return "Your peak cognitive window today is **2–4 PM** — this is when your alertness circadian rhythm, sleep quality data, and historical focus session performance all converge. Block this time for your hardest, most creative tasks. Your secondary window is 9–11 AM. Avoid scheduling anything mentally demanding after 6 PM given your current sleep debt.";
+  if (msg.includes('sleep')) return "Your 7.2h average is within healthy range, but your **consistency score (68%)** is where I see room for improvement. You're varying sleep timing by ~45 minutes across the week, which fragments your circadian rhythm. This is likely contributing to your 1:30 PM energy dip. Try anchoring your wake time — even on weekends — and you'd likely see a 8-12 point boost in afternoon focus.";
+  if (msg.includes('stress')) return "Your current stress level at **43%** is moderate and well within your personal manageable zone (you historically handle up to ~60% well). The prediction for a spike on Wednesday is based on your calendar showing 6 meetings, a deadline overlap, and reduced sleep consistency over the past 3 days. I'd recommend pre-loading Wednesday with a 20-min walk and clearing your inbox the night before.";
+  return "Great question. Based on your behavioral data, I can see your wellbeing trajectory is positive this week. Your focus metrics are strong, sleep is adequate, and your stress hasn't crossed critical thresholds. The main thing I'd watch is Wednesday's schedule — it looks heavier than your optimal load. Would you like me to break down any specific aspect of your behavioral profile in more detail?";
+}
+
+// ============ INIT ============
+window.addEventListener('load', () => {
+  renderProdBars();
+  drawFocusWave();
+  animateRing(74);
+  setupReveal();
+
+  // Animate mini bars
+  setTimeout(() => {
+    document.querySelectorAll('.mini-bar-fill').forEach(el => {
+      const w = el.style.width;
+      el.style.width = '0';
+      setTimeout(() => { el.style.width = w; }, 100);
+    });
+  }, 400);
+});
+</script>
+</body>
+</html>
